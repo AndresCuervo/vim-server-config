@@ -1,0 +1,14 @@
+#include "bits.h"
+
+int main() {
+    // Get the firs char of input ...
+    int ch = getchar();
+    // ... and while it's not the end of the file ...
+    while (EOF != ch) {
+        // ... print its binary representation using print_bits!
+        print_bits(ch);
+        /* printf("\n"); */
+        // Get the next char and start the while all over again.
+        ch = getchar();
+    }
+}

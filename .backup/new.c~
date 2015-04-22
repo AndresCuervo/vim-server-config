@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <math.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+char* lead = "";
+int pos = 0;
+int neg = 1;
+int bin = 1;
+int hex = 1;
+int oct = 1;
+int error = 1;
+
+long getnum(void) {
+    long number = 0;
+    int one = getchar();
+    int two = getchar();
+    int three = getchar();
+
+    if (isspace(one)) {
+        while(isspace(one)) {
+            one = two;
+            two = three;
+        }
+    }
+
+    if (one == '-') {
+        neg = 0;
+    }
+
+    if (one == '0') {
+        if (isdigit(two)) {
+            oct = 0;
+        } else if (two == 'b') {
+            bin = 0;
+        } else if (two == 'x') {
+            hex = 0;
+        }
+    }
+
+    ungetc(one, stdin);
+    ungetc(two, stdin);
+
+    if (oct == 0) {
+        scanf("%li", &number);
+        printf("%li", number);
+    } else if (hex == 0) {
+        scanf("%li", &number);
+        printf("%li", number);
+    } else if (bin == 0) {
+        // do binary stuff like adding on empty 0s to make 8 places??
+    }
+    printf("lead: %p\nnumber: %lu\nchar: %c\npos: %d\nneg: %d\nbin: %d\nhex: %d\noct: %d\n", lead, number, pos, neg, bin, hex, oct);
+
+    return number;
+
+    lead = "";
+    pos = 0;
+    neg = 1;
+    bin = 1;
+    hex = 1;
+    oct = 1;
+    error = 1;
+}
+int main () {
+    getnum();
+}

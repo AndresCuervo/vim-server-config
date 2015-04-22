@@ -1,0 +1,24 @@
+#include "getnum.h"
+
+int main(){
+    int ch = ' ';
+    int number;
+    // While it's not the EOF ...
+    while(ch != EOF){
+        // ... put it back on the read stack ...
+        ungetc(ch, stdin);
+        number = getnum();
+        // ... print the required prefix ...
+        printf("0b");
+
+        for (int i = 0; i < CHAR_BIT; i++) {
+            /* ... print the character i bits to the left, anding it with 128
+             * as a character mask. Take its negative to determine whether
+             * or not it's equal to 0, then take the negative of that to flip
+             * the bits to their correct value. */
+            printf("%d", !!((number << i & 0x80)));
+        }
+        printf(" ");
+        ch = getchar();
+    }
+}

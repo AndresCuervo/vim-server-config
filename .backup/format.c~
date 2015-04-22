@@ -1,0 +1,258 @@
+// strtok, memset seen in K&R, page 250.
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include <math.h>
+
+// Flags
+int r = 0;
+int j = 0;
+int s = 0;
+int w = 0;
+
+int line_w = 72;
+
+void help() {
+    // Print a usage note.
+    printf("Usage: ./format <optional flags> \n\
+            Flags:\n\
+            \t -w # \t : Change the max. line (w)idth (specify a number between 1 - 1000).\n\
+            \t -r \t : (R)ight-align text. \n\
+            \t -j \t : (J)ustify-align text. \n\
+            \t -s \t : (S)kip multiple blank lines.\n");
+    // Exit with a non-zero exit value.
+    exit(1);
+}
+
+
+void check_args(int argc, char *argv[]) {
+    // Going through the arguments ...
+    for (int i = 1; i < argc; i++) {
+        // If the argument is -w ...
+        if (strcmp("-w", argv[i]) == 0) {
+            // ... if it has at least one argument after it (ideally a number) ...
+            if (i < (argc - 1)) {
+                // ... if the next argument is a digit ...
+                if (isdigit(*argv[i + 1])) {
+                    // ... set line_w(idth) to the next argument.
+                    line_w = atoi(argv[++i]);
+                    // If line_w(idth) is less than one or greater than 1000 ...
+                    if (line_w < 1 || line_w > 1000) {
+                        // ... notify the user and ...
+                        printf("The width you specified is either less than 1 or greater than 1000.");
+                        // ... execute the help message.
+                        help();
+                    }
+                    // ... if the next argument isn't a digit ...
+                } else {
+                    // ... execute the help message.
+                    help();
+                }
+                // ... if it doesn't have at least one more argument after it ...
+            } else {
+                // ... execute the help message.
+                help();
+            }
+            // If the argument is -r ...
+        } else if ((strcmp("-r", argv[i]) == 0)) {
+            // If the user hasn't already specified another alignment ...
+            if (j == 0) {
+                // ... set the r(ight) alignment flag.
+                r = 1;
+                // If the user has set another alignment ...
+            } else {
+                // ... notify them and ...
+                printf("Whoops, you can't have right alignment turned on too!\n");
+                // ... execute the help message.
+                help();
+            }
+            // If the argument is -j ...
+        } else if (strcmp("-j", argv[i]) == 0) {
+            // If the user hasn't already specified another alignment ...
+            if (r == 0) {
+                // ... set the j(ustified) alignment flag.
+                j = 1;
+                // If the user has set another alignment ...
+            } else {
+                // ... notify them and ...
+                printf("Whoops, you can't have justified alignment turned on too!\n");
+                // ... execute the help message.
+                help();
+            }
+            // If the argument is -s ...
+        } else if (strcmp("-s", argv[i]) == 0) {
+            // ... set the (s)kip flag to true.
+            s = 1;
+            // If the argument is -? or -h ...
+        } else if (strcmp("-?", argv[i]) == 0 || strcmp("-h", argv[i]) == 0) {
+            // ... execute the help message.
+            help();
+            // If the argument isn't valid ...
+        } else {
+            // ... execute the help message.
+            help();
+        }
+    }
+}
+
+char word[100];
+char line[1000];
+char c = 0;
+int line_l = 0;
+int word_l = 0;
+int gap = 0;
+char * next_word;
+int spaces_seen;
+int spaces_printed = 0;
+int g = 0;
+
+void right_align() {
+    // ... carriage return to wipeout the line.
+    do {
+        printf("\r");
+    } while (0 == r);
+    int spaces = line_w - line_l;
+    // Print the number of spaces it takes to reach the max line width ...
+    for (int i = 0; i <= spaces; i++) {
+        printf(" ");
+    }
+    // and then print the line again.
+    printf("%s", line);
+}
+int print_appropriate_spaces(int space_to_print){
+    int l =0;
+    for(l = 0; l <= 1 + space_to_print; l++){
+        printf(" ");
+    }
+    /* printf("%d", l); */
+    return l;
+}
+
+void justify_align() {
+    do {
+        printf("\r");
+    } while (0 == j);
+
+    int extra_spaces = line_w - line_l;
+    for(int c = 0; c < line_l;c++){
+        if(isspace(line[c])){
+            gap++;
+        }
+    }
+    for ( int k = 0; k < line_l; k++ ){
+        if(isspace(line[k]) && extra_spaces > 0){
+            g++;
+            /* printf("Extra Spaces: %d, g: %d", extra_spaces, g); */
+            spaces_seen = (int) ceil((g * extra_spaces) / gap);
+            int space_to_print = spaces_seen - spaces_printed;
+            spaces_printed = print_appropriate_spaces(space_to_print);
+            continue;
+        }
+        if(line[k] == '\0' || line[k] == '\n'){
+            break;
+        }
+        printf("%c",line[k]);
+    }
+    gap = 0;
+    g = 0;
+    spaces_printed = 0;
+
+}
+
+void print_lines() {
+
+    // Get the first word.
+    c = fscanf(stdin, "%s" , word);
+    while (c != EOF) {
+        word_l = strlen(word);
+        // If printing the word on this line won't go over the line width, print it.
+        if ((line_l + word_l) <= line_w) {
+            // Concatenate a space to the word, and the word to line.
+            strcat(line, strcat(word, " "));
+            line_l += word_l + 1;
+            printf("%s", word);
+            // If printing it on this line will go over the line width limit,
+            // print it as the beginning of the next line.
+        } else {
+            // If the r(ight) alignment flag is set ...
+            if (0 != r) {
+                right_align();
+            }
+
+            // If the r(ight) alignment flag is set ...
+            if (0 != j) {
+                justify_align();
+            }
+            // Wipeout the line in memory in preparation to construct the next line.
+            memset(line, 0, sizeof(char));
+            // Concatenate the word with a space and the line with the word.
+            strcat(line, strcat(word, " "));
+            line_l = word_l + 1;
+            // Print the line
+            printf("\n%s", word);
+        }
+
+        // Get the next 2 characters and ...
+        int ch = getchar();
+        int nextch = 0;
+
+        // ... while the next character is a new line ...
+        while(ch == '\n') {
+            // if the next character is a new line ...
+            if ((nextch = getchar()) == '\n') {
+                // If the r(ight) alignment flag is on, right align.
+                if (0 != r) {
+                    right_align();
+                }
+
+                // If the r(ight) alignment flag is on, right align.
+                if (0 != j) {
+                    justify_align();
+                }
+
+                // Print the newlines
+                printf("\n\n");
+                // Get the next character
+                ch = getchar();
+                // While the next character is also a newline
+                while(ch == '\n') {
+                    // If s is not turned on ...
+                    if (s != 1) {
+                        // ... print the extra blank lines.
+                        printf("%c", ch);
+                    }
+                    // get the next char.
+                    ch = getchar();
+                }
+                // Wipeout the line in preparation for the next line ...
+                memset(line, 0, sizeof(char));
+                // ... and set the line length to 0.
+                line_l= 0;
+            }
+            // Get the next character.
+            ch = getchar();
+        }
+        // Unget the character to process it later.
+        ungetc(ch, stdin);
+        // Get the next word to start all over again!
+        c = fscanf(stdin, "%s" , word);
+    }
+
+    // Perform the right alignment operation on the last line.
+    if (0 != r) {
+        right_align();
+    }
+    if (0 != j) {
+        justify_align();
+    }
+}
+
+int main(int argc, char *argv[]) {
+    // Check the arguments, switching flags as appropriate.
+    check_args(argc, argv);
+    // Print the lines, formatting as appropriate.
+    print_lines();
+    // Return 0 upon successful completion of formatting.
+    return 0;
+}

@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Beginning blank line for readability
+echo
+
+# If no args, print a usage note and exit with a non-zero exit value
+if [ $# -eq 0 ]; then
+    echo "Usage: ./mypath <program name> <other program name>"
+    exit 1;
+fi
+
+# If there are args ...
+for arg in $@; do
+    # Set Internal Field Seperator to ':'
+    IFS=':'
+    # For each directory in the path ...
+    for dir in $PATH; do
+        # See if exists and is executable against the argument
+        if [ -x $dir/$arg ]; then
+            # Use file to find and print it
+            file $dir/${arg}
+        fi
+    done
+    # Blank line in between each for readability
+    echo
+done

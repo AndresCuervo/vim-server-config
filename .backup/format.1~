@@ -1,0 +1,52 @@
+.\" Man page for format program
+.\" Cuervo & Oge - Spring 2015
+
+.TH format 1 "17 March 2015" "CSCI 241" "Oberlin College"
+
+.SH NAME
+.B format
+\- a program to format your files!
+
+.SH SYNOPSIS
+.B ./format
+[ optional formatting flags ]
+
+.SH DESCRIPTION
+This program formats from standard input, can be redirected to a file to write a formated version.
+
+.SH OPTIONS
+.IP "-w <some number>"
+Changes the line
+.B w
+idth of the output to
+.I "<some number>".
+.IP
+.I Note:
+must be between
+.B 1
+and
+.B 1000
+\f\..
+
+.IP "-r"
+.B R
+ight align the output.
+
+.IP "-j"
+.B J
+ustify align the output.
+
+.IP "-s"
+.B S
+kip empty paragraphs.
+
+.IP "-h or -?"
+Brings up the
+.B h
+elp note and returns with a non-zero exit value.
+
+.SH AUTHORS
+Andres Cuervo and Alexandre Oge (Spring 2015)
+
+.SH BUGS
+    None!

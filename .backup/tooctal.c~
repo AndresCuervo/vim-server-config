@@ -1,0 +1,21 @@
+#include "getnum.h"
+
+int main(){
+    int ch = ' ';
+    int number;
+    // While it's not EOF ...
+    while(ch != EOF){
+        // .. get the next number ...
+        number = getnum();
+        // ... if it's a positive number print it with a leading 0 ...
+        if ((number - number) == 0){
+            printf("%s%o ", "0", number);
+        } else {
+        // ... if it's a negative number print it with a leading -0 ...
+            number = abs(number);
+            printf("%s%o", "-0", number);
+        }
+        // and get the next char!
+        ch = getchar();
+    }
+}

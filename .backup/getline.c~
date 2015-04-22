@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+int main () {
+    char line[1000] = "Atop a large, ice-covered plateau,     "; // 5 extra space.
+    int extra_spaces = 5;
+    char * next_word;
+    int gaps = 4;
+    int j = 1;
+    int line_w = 72;
+    int line_l = strlen(line);
+    printf("%s", line);
+
+    if (0 != j) {
+        int spaces_seen;
+        int spaces_printed = 1;
+        printf("\r");
+        printf ("Splitting string \"%s\" into tokens:\n------\n", line);
+        next_word = strtok (line," ");
+        while (next_word != NULL) {
+            printf ("%s",next_word);
+            // print justified spaces
+
+            for (int g = 1; g <= gaps; g++) {
+                spaces_seen = (int) ceil((g * extra_spaces) / gaps);
+                for ( ; spaces_printed <= spaces_seen; spaces_printed++) {
+                    printf("*");
+                }
+                printf("%d%s", spaces_seen, "*");
+            }
+            spaces_printed = spaces_seen;
+            next_word = strtok (NULL, " ");
+        }
+    }
+}

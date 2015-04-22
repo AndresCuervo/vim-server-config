@@ -1,0 +1,15 @@
+#!/bin/bash
+
+for file in "$@"
+do
+    path="."
+    #if we have read permissions, we check if file exist
+    if [ -f -r ${path}/${file}  ]
+    then
+        #if file exist, we tell user
+        echo "File ${path}/${file} exist."
+    else
+        echo "File ${path}/${file} not found."
+        #end of if loop
+    fi
+done

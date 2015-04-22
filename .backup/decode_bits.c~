@@ -1,0 +1,14 @@
+#include "bits.h"
+#include <math.h>
+
+int main() {
+    // Get the firs char of input ...
+    int ch = getchar();
+    // ... and while it's not the end of the file ...
+    while (EOF != ch) {
+        // ... print its ASCII character representation using decode_bits!
+        decode_bits(ch);
+        // Get the next char and start the while all over again.
+        ch = getchar();
+    }
+}

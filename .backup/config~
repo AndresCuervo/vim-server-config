@@ -1,0 +1,9 @@
+Host bookcoop bookcoop.org
+Hostname bookcoop.org
+IdentityFile ~/.ssh/bookcoop_rsa # private key for realname
+User bookcoop
+
+Host csoberlin cs.oberlin.edu
+Hostname cs.oberlin.edu
+IdentityFile ~/.ssh/csoberlin_rsa
+User remoteusername

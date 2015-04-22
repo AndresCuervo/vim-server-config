@@ -1,0 +1,40 @@
+#!/bin/sh
+# set -x
+
+cmd=ls
+[ $(type -P "$cmd")  ] && echo "$cmd is in PATH"  ||
+    { echo "$cmd is NOT in PATH" 1>&2; exit 1;  }
+
+echo "\n\n"
+
+for dir in ${PATH}
+do
+    echo "$dir\n\n"
+    for a in "$@"
+    do
+        if [ -w $a ]; then
+            echo "File exists and is writable: $a"
+        else
+            echo "Uhm, IDK what this is: $a"
+        fi
+    done
+done
+
+# echo "$@"
+
+
+
+
+# for file in `ls *`
+# do
+#     case "${file}" in
+#         *.sh)
+#             echo "Found a shell script: $file"
+#             ;;
+#         *.c)
+    #             echo "Found a C program: $file"
+    #             ;;
+#         *)
+    #             echo "Uhmmmm, what's this??? : $file !"
+    #     esac
+    # done

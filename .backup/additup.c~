@@ -1,0 +1,188 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+// Define struct for BigInt
+struct BigInt {
+    int digit;
+    struct BigInt *next;
+};
+// Define BigInt as a type for convenience's sake.
+typedef struct BigInt BigInt;
+
+// Function to create a new number with a given digit
+BigInt * newInt(int digit) {
+    BigInt * newBigInt = malloc(sizeof(BigInt));
+    // If the malloc fails, print and error message and exit.
+    if ( newBigInt == NULL ) {
+        printf("Whoops, couldn't allocate memory!");
+        exit(EXIT_FAILURE);
+    }
+    newBigInt->digit = digit;
+    newBigInt->next = NULL;
+    return newBigInt;
+}
+
+// Function to insert a node at the beginning of the number's Linked List.
+void pushInt(BigInt** number, int new_digit) {
+    BigInt * newBigInt = newInt(new_digit);
+    // Set the current number to be the new number's 'next.'
+    newBigInt->next = (*number);
+    // Set the newInt to be the number of the number.
+    (*number) = newBigInt;
+}
+
+BigInt * tempToFree;
+// Adds two numbers, represented as Linked Lists, together.
+BigInt* addNumbers (BigInt* first, BigInt* second, BigInt * temp) {
+    BigInt* result = NULL;
+    BigInt * prev = NULL;
+    int carry = 0, sum;
+
+    // While both numbers exist ...
+    while (first != NULL || second != NULL) {
+        // ... sum is the carry amount + the first digit, if it exists, and the
+        // second digit, if it exists.
+        sum = carry + (first ? first->digit: 0) + (second ? second->digit: 0);
+        // Carry the 1 if the sum is at least 10.
+        carry = (sum >= 10) ? 1 : 0;
+        // Take only the second digit in the sum.
+        sum = sum % 10;
+        tempToFree = temp;
+        // Create a temp. number with sum as digit.
+        temp = newInt(sum);
+        /* printf("temp: %p\n", temp); */
+        /* printf("tempToFree: %p\n", tempToFree); */
+        // If this is the first number then set it to the temp. number.
+        if ( result == NULL ) {
+            result = temp;
+        } else {
+            // If this is not the first number then connect it to the rest.
+            prev->next = temp;
+        }
+
+        // Set prev for next insertion.
+        prev  = temp;
+
+        // Move first and second pointers to next digits.
+        if (first) {
+            first = first->next;
+        }
+        if (second) {
+            second = second->next;
+        }
+    }
+
+    // If carry is greater than 0 make temp's next the value of carry.
+    if (carry > 0) {
+        temp->next = newInt(carry);
+        printf("temp->next: %p\n", temp->next->next);
+    }
+
+    // return number of the resultant list
+    return result;
+}
+
+// Accesor help function for printNumber.
+BigInt * getDigit(BigInt * number, int index) {
+    int i = 0;
+    BigInt * ret = number;
+    while (i != index) {
+        ret = ret->next;
+        i++;
+    }
+    return ret;
+}
+
+void printNumber(BigInt * number) {
+    // Copy the number, to print later.
+    BigInt * printable = number;
+    int size = 0;
+    // Count the significant digits of the number.
+    while(number != NULL) {
+        size++;
+        /* printf("%d, %p -> ", number->digit, number->next); */
+        number = number->next;
+    }
+    printf("\n");
+    // Using size, print the digits of the number (traversing the Linked List
+    // in reverse order.)
+    for (int i = size - 1; i >= 0; i--) {
+        printf("%d", getDigit(printable, i)->digit);
+    }
+    printf("\n");
+}
+
+int main(void) {
+    BigInt * this = NULL;
+    BigInt * thisToFree = NULL;
+    BigInt * accumulator = NULL;
+    BigInt * result = NULL;
+    BigInt * temp = NULL;
+    int c;
+
+    pushInt(&accumulator, 0);
+    /* printf("accumulator: %p\n", accumulator); */
+    BigInt * accumulatorToFree = accumulator;
+
+    /* printf("Input: "); */
+    c = getchar();
+    while ( EOF != c) {
+        while ( isspace(c) || '0' == c ) {
+            c = getchar();
+        }
+        while ('\n' != c && !isspace(c) && EOF != c) {
+            if (isdigit(c)) {
+                pushInt(&this, c - '0');
+                c = getchar();
+            } else {
+                c = ' ';
+            }
+        }
+        while ( '\n' != c && EOF != c ) {
+            c = getchar();
+        }
+
+        if (EOF != c) {
+            // Add the two number and see result
+            result = addNumbers(this, accumulator, temp);
+            printf("Total: ");
+            printNumber(result);
+            accumulator = result;
+            // Copy to a dummy variable pointer to be freed if next input is EOF.
+            thisToFree = this;
+            while ( thisToFree != NULL ) {
+                BigInt * temp = thisToFree;
+                BigInt * next = thisToFree->next;
+                /* printf("freeing: %p\n", temp); */
+                free(temp);
+                thisToFree = next;
+            }
+            this = NULL;
+            /* printf("Input: "); */
+        }
+    }
+
+    // Free result and this.
+    /* printf("Freeing result:\n"); */
+    /* printf(" --------------\n"); */
+    while ( result != NULL ) {
+        BigInt * temp = result;
+        BigInt * next = result->next;
+        /* printf("freeing: %p\n", temp); */
+        free(temp);
+        result = next;
+    }
+
+    /* printf("Freeing accumulatorToFree:\n"); */
+    /* printf(" --------------------------\n"); */
+    while ( accumulatorToFree != NULL ) {
+        BigInt * temp = accumulatorToFree;
+        BigInt * next = accumulatorToFree->next;
+        /* printf("freeing: %p\n", temp); */
+        free(temp);
+        accumulatorToFree = next;
+    }
+
+    return EXIT_SUCCESS;
+}

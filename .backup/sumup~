@@ -1,0 +1,12 @@
+#!/bin/sh
+
+SUM=0
+
+# Read lines from stdin in there are lines present...
+while read line; do
+    # Add the value of the line to sum
+    SUM=`expr $SUM + $line`
+done
+
+# Echo the sum!
+echo $SUM

@@ -1,0 +1,15 @@
+Andres Cuervo & Axandre Oge
+CS241
+
+- Makefile
+    A makefile that compiles additup.c into an executable called additup
+- additup.c
+    Compiles to an executable that can add up many digits using a Linked List
+    implementation.
+
+Spent about 7 hours on this lab.
+
+Valgrind has uncaught memory leaks, we can't find the correct place to free
+all of them unfortunately.
+
+I affirm that I have adhered to the Honor Code on this assignment.

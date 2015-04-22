@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+int finished = 0;
+int MAXWLENGTH = 100;
+
+char getword(void){
+    int ch = getchar();
+    char word[MAXWLENGTH];
+    int index = 0;
+
+    while (!isspace(ch) && ch != '\n') {
+        word[index++] = ch;
+        word[index] = '\0';
+        ch = getchar();
+    }
+    return *word;
+}
+
+int main(){
+    char * word = getword();
+    printf("%s", *word);
+    word = getword();
+    printf("%c", word);
+}

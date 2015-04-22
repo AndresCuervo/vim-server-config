@@ -1,0 +1,58 @@
+#!/bin/sh
+
+START=1
+STOP=1
+STEP=1
+DIRECTION="up"
+
+# If the number of arguments equals ...
+case ${#} in
+    0) # then print a usage note and exit with an error (non-zero) exit code.
+        printf "Usage:\n %10s %10s \n %10s %20s \n %10s %30s \n" \
+            "./myseq <start> <stop> <step>" "# go from <start> to <stop> by <step>" \
+            "./myseq <start> <stop>" "# assume step is 1" \
+            "./myseq <stop>" "# assume start and step are 1"
+        exit 1;
+        ;; # break
+    1) # then set STOP equal to the only arg
+        STOP=${1}
+        ;;
+    2) # then set START equal to the first arg ...
+        START=${1}
+        # and STOP equal to the second arg.
+        STOP=${2}
+        ;; # break
+    3) # then set START equal to the first arg ...
+        START=${1}
+        # and STOP equal to the first arg ...
+        STOP=${2}
+        # and STEP equal to the third arg.
+        STEP=${3}
+esac
+
+# If STOP is less than START ...
+if [ $STOP -lt $START ]; then
+    # STEP becomes negative ...
+    STEP=`expr  0 - $STEP`
+    # and DIRECTION is set to "down".
+    DIRECTION="down"
+fi
+
+# If the direction is up, that is:
+# STOP is **not** less than START ...
+if [ $DIRECTION = "up"  ]; then
+    # while START is less than or equal to STOP ...
+    while [ $START -le $STOP ]; do
+        # echo START ...
+        echo "$START"
+        # and set START equal to itself plus STEP (increment).
+        START=`expr $START + $STEP`
+    done
+else # If it's not "up" it must be going "down," so ...
+    while [ $START -ge $STOP ]; do
+        # echo START ...
+        echo "$START"
+        # and set START equal to itself plus STEP (increment).
+        START=`expr $START + $STEP`
+    done
+fi

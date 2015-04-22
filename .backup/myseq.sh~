@@ -1,0 +1,35 @@
+#!/bin/sh
+
+START=STOP=STEP=1
+# STOP=1
+# STEP=1
+
+case ${#} in
+    0)
+        printf "Usage: %3s %10s \n %10s %10s \n %10s %10s \n" \
+        "./myseq <start> <stop> <step>" "# go from <start> to <stop> by <step>" \
+        "./myseq <start> <stop>" "# assume step is 1" \
+        "./myseq <stop>" "# assume start and step are 1"
+        exit 1;
+        ;;
+    1)
+        STOP=${1}
+        ;;
+    2)
+        START=${1}
+        STOP=${2}
+        ;;
+    3)
+        START=${1}
+        STOP=${2}
+        STEP=${3}
+esac
+
+if [ $STOP -lt $START ]; then
+    STEP=`expr  0 - $STEP`
+fi
+
+while [ $START -gt $STOP ]; do
+    echo "$START"
+    START=`expr $START + $STEP`
+done

@@ -1,0 +1,240 @@
+#include "getnum.h"
+
+int negative = 1;
+int number = 0;
+int error = 1;
+
+void getdec(int ch){
+    int pos = 0;
+    // If it's a digit ...
+    while (!isspace(ch) && isdigit(ch)){
+        // ... perform character math and ...
+        int c = ch - '0';
+        // ... if it's the first number add it and incremment pos.
+        if (pos == 0){
+            number += c;
+            pos++;
+            ch = getchar();
+            // ... if it's not first, make room for it in the number
+            // by multiplying it by 10.
+        } else {
+            number *= 10;
+            number +=c;
+            pos++;
+            ch = getchar();
+        }
+    }
+    //goes to the end
+    while(!isspace(ch) && ch != EOF){
+        ch = getchar();
+        error = 0;
+    }
+}
+
+void getoct(int ch){
+    int pos = 0;
+    // If it's a digit ...
+    while(!isspace(ch) && isdigit(ch)){
+        int c = ch - '0';
+        if (c <= 7){
+            if (pos == 0){
+                number += c;
+                pos++;
+                ch = getchar();
+            } else {
+                number *= 010;
+                number += c;
+                pos++;
+                ch = getchar();
+            }
+        } else {
+            // ... number is too large.
+            break;
+        }
+    }
+
+    // Go to next non-whitespace to repeat the process!
+    while(!isspace(ch) && ch != EOF){
+        ch = getchar();
+        error = 0;
+    }
+}
+int hexdigit(int ch){
+    switch(ch){
+        case 'a':
+            return 0xa;
+            break;
+        case 'b':
+            return 0xb;
+            break;
+        case 'c':
+            return 0xc;
+            break;
+        case 'd':
+            return 0xd;
+            break;
+        case 'e':
+            return 0xe;
+            break;
+        case 'f':
+            return 0xf;
+            break;
+        case 'A':
+            return 0xA;
+            break;
+        case 'B':
+            return 0xB;
+            break;
+        case 'C':
+            return 0xC;
+            break;
+        case 'D':
+            return 0xD;
+            break;
+        case 'E':
+            return 0xE;
+            break;
+        case 'F':
+            return 0xF;
+            break;
+    }
+    return 0;
+}
+
+void getHex(char ch){
+    int pos = 0;
+    // If it's a digit ...
+    while(!isspace(ch) && EOF != ch){
+        if (isdigit(ch)){
+            int c = ch - '0';
+            if (pos == 0){
+                number += c;
+                pos++;
+                ch = getchar();
+            } else {
+                number *= 0x10;
+                number += c;
+                pos++;
+                ch = getchar();
+            }
+        } else if (isxdigit(ch)){
+            int c = hexdigit(ch);
+            if (pos == 0){
+                number += c;
+                pos++;
+                ch = getchar();
+            } else {
+                number *= 0x10;
+                number += c;
+                pos++;
+                ch = getchar();
+            }
+        } else {
+            break;
+        }
+    }
+    // Go to next non-whitespace to repeat the process!
+    while(!isspace(ch) && EOF != ch){
+        ch = getchar();
+        error = 0;
+    }
+}
+
+void getbin(char ch){
+    int pos = 0;
+    // If it's a digit ...
+    while(!isspace(ch) && EOF != ch){
+        if (ch == '0'){
+            if (pos == 0){
+                number = number << 1;
+                pos ++;
+                ch = getchar();
+            } else {
+                number = number << 1;
+                pos ++;
+                ch = getchar();
+            }
+        } else if (ch == '1'){
+            if (pos == 0){//the negative case
+                negative = 0;
+                pos++;
+                ch = getchar();
+            } else if (pos == 1){
+                number = number + 1;// (int)pow(2,0);
+                pos++;
+                ch = getchar();
+            } else {
+                number = number << 1;
+                number ++;
+                pos++;;
+                ch = getchar();
+            }
+        } else {
+            break;
+        }
+    }
+    if (isspace(ch) && EOF != ch){
+        if (negative == 0){
+            number = -number;
+        }
+    }
+    // Go to next non-whitespace to repeat the process!
+    while(!isspace(ch) && ch != EOF){
+        ch = getchar();
+        error = 0;
+    }
+}
+
+long getnum(void){
+    negative = 1;
+    number = 0;
+    if (error == 0) {
+        printf("ERROR ");
+        number = 0;
+        exit(0);
+        return 0;
+    }
+
+    //read in a character
+    int ch = getchar();
+    //skip leading white space
+    if (isspace(ch)){
+        while(isspace(ch)){
+            ch = getchar();
+        }
+    }
+    if (ch== '-'){
+        negative = 0;
+        ch = getchar();
+    }
+    if(isdigit(ch)){
+        if (ch != '0'){
+            getdec(ch);
+        } else if (ch == '0'){
+            //there is a possible header marker or a single 0
+            ch = getchar();
+            if (isdigit(ch)) {
+                getoct(ch);
+            } else if (isspace(ch) || EOF == ch) {
+                number = 0;
+            } else if (ch == 'x'){
+                ch = getchar();
+                getHex(ch);
+            } else if (ch == 'b'){
+                ch = getchar();
+                getbin(ch);
+            }
+        }
+    } else {
+        printf("ERROR ELSE");
+        while(!isspace(ch) && ch != EOF){
+            ch = getchar();
+            error = 0;
+        }
+    }
+
+    if (negative == 0){
+        return -number;
+    }
+    return number;
+}

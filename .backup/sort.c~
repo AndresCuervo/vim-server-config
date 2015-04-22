@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int MAX = 1024;
+char **line_ptr;
+
+int get_line( char *line ) {
+    int c, i = 0;
+    char * ret = line;
+
+    while (--MAX > 0 && ((c = getchar()) != EOF) && c != '\n') {
+        *line++ = c;
+        i++;
+    }
+
+    if (c == '\n') {
+        *line++ = c;
+        i++;
+    }
+    *line = '\0';
+    // what does vvv this do??
+    line = ret;
+    return i;
+}
+
+int read_lines ( char *line_ptr[], int max_lines ) {
+    int len, n_lines = 0;
+    char *p, *line = malloc ( max_lines * sizeof(char) );
+
+    while ( (len = get_line(line) ) > 0) {
+        if ( n_lines >= max_lines || (p = malloc( len * sizeof(char) )) == NULL ) {
+            return -1;
+        } else {
+            line[len - 1] = '\0';
+            strcpy( p, line );
+            line_ptr[n_lines++] = p;
+        }
+    }
+    free(p);
+    free(line);
+    return n_lines;
+}
+
+
+/* printf("length: %d\n", len); */
+
+int main (int argc, char *argv[]) {
+    int n_lines = 0;
+    line_ptr = malloc( (MAX * MAX) * sizeof(char) );
+    if ( (n_lines = read_lines( line_ptr, MAX ) >= 0) ) {
+        qsort( line_ptr, 0, n_lines - 1, (int (*) (const void *, const void *)) strcmp);
+    }
+    printf("n_lines: %d\n", n_lines);
+    for (int i = 0; i < n_lines; i++) {
+        printf( "%s\n", line_ptr[i]);
+    }
+    free(line_ptr);
+}

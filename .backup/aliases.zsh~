@@ -1,0 +1,20 @@
+alias ls='ls -av --color=auto'
+alias cl='clear && ls'
+cdls() {
+  cd "$1";
+  ls;
+}
+alias cdls="cdls"
+alias cdcl="cdcl"
+cdcl() {
+  cd "$1";
+  cl;
+}
+alias shme='ssh acuervo@cs.oberlin.edu'
+alias shbook='ssh bookcoop@bookcoop.org'
+alias cdweb="cd public_html/ && cl"
+alias class="cd ~/cs241/hw7 && cl"
+men() {
+    nroff -man "$1" | less -is
+}
+alias men="men"

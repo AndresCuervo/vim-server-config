@@ -1,0 +1,10 @@
+#include <stdio.h>
+
+int main () {
+    long bin = (long) "0b00000001";
+    long hex = (long) "0x0000FF";
+    long oct = (long) "-01234";
+    long dec = (long) "10";
+    printf("binary: %ld\n hex: %li\n oct: %li\n dec: %ld\n ", bin, hex, oct, dec);
+
+}

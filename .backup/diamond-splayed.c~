@@ -1,0 +1,48 @@
+#include <stdio.h>
+/* Apparently I need to include the following to get the C99 standard to stop whining?
+ * Found at: http://stackoverflow.com/questions/21640838/implicit-declaration-of-functions */
+#include <ctype.h>
+
+int getdigit() {
+    int c = getchar();
+    // If it's not the end of a file and is a digit, return it. Not a digit? Test the next character.
+    return (c == EOF ? -1 : (isdigit(c) ? c :getdigit()));
+}
+
+// Orientation: u for up, d for down.
+void triangle(char orientation, int height) {
+    int level = (orientation == 'u' ? 0 : height - 2);
+    while (level != (orientation == 'u' ? height : -1)) {
+        int spaces = height - level;
+        int stars = 1 + (level * 2);
+        int leads = 23;
+        // Print leading spaces to center the diamond.
+        while (leads != 0) {
+            printf(" ");
+            leads--;
+        }
+        while (spaces != 0) {
+            printf(" ");
+            spaces--;
+        }
+        while (stars != 0) {
+            printf("*");
+            stars--;
+        }
+        printf("\n");
+        orientation == 'u' ? level++ : level--;
+    }
+}
+
+int main() {
+    printf("So, I hear you want a diamond. How tall do you want that to be?\nEnter it here [a number between 1 & 9]: ");
+    int height = getdigit() - 48;
+    printf("The first number I saw was %d, so I'm using that for the height!\n", height);
+
+    // Print a pyramid.
+    triangle('u', height);
+    // Print it upside down, minus the base, to get your diamond!
+    triangle('d', height);
+
+    return 0;
+}

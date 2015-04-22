@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <ctype.h>
+
+
+int print_appropriate_spaces(int space_to_print){
+    int l =0;
+    for(l = 0; l<space_to_print; l++){
+        printf("*");
+
+    }
+    return l;
+
+}
+
+int main () {
+    char line[1000] = "Atop a large, ice-covered plateau, a struggle for survival is occuring."; // 5 extra space.
+    int j = 1;
+    int line_w = 72;
+    int line_l = strlen(line);
+
+
+    if (0 != j) {
+        int extra_spaces = line_w - line_l - 1; // Minus one for the null bite
+        int spaces_seen;
+        int spaces_printed = 0;
+        int g = 0;
+        int gap = 0;
+        for(int c = 0; c < line_l;c++){
+            if(isspace(line[c])){
+                gap++;
+            }
+        }
+        for ( int k = 0; k < line_l; k++ ){
+            if(isspace(line[k]) && extra_spaces < 0){
+                g++;
+                spaces_seen = (int) ceil((g * extra_spaces) / gap);
+                int space_to_print = spaces_seen - spaces_printed;
+                spaces_printed = print_appropriate_spaces(space_to_print);
+                continue;
+            }
+            if(line[k] == '\0'){
+                break;
+            }
+            printf("%c",line[k]);
+        }
+    }
+    printf("\n");
+}

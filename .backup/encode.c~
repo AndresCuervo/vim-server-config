@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char * argv[]) {
+    char * filename = argv[1];
+    FILE * input = fopen(filename, (char *) "r+");
+    int ascii_count[129] = { 0 };
+    for (int c = fgetc(input); c != EOF; c = fgetc(input)) {
+        ascii_count[c]++;
+    }
+    ascii_count[128]++;
+
+    for (int j = 0; j <= 128; j++) {
+        printf("%d %c: %d\n", j, j, ascii_count[j]);
+    }
+    return EXIT_SUCCESS;
+}

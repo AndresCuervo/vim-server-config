@@ -1,0 +1,134 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+// TODO:
+// - make the prev int field work to make print work as expected!
+// - add the while (EOF != c) loop for input.
+// - make output match exactly the lab :)
+
+/* Linked list node */
+struct BigInt {
+    int digit;
+    struct BigInt *next, *prev;
+    struct BigInt *tail;
+};
+// Define BigInt as a type for convenience's sake.
+typedef struct BigInt BigInt;
+
+/* Function to create a new node with given digit */
+BigInt *newInt(int digit) {
+    BigInt * newBigInt = (BigInt *) malloc(sizeof(BigInt));
+    newBigInt->digit = digit;
+    newBigInt->next = NULL;
+    newBigInt->prev = NULL;
+    newBigInt->tail = NULL;
+    return newBigInt;
+}
+
+/* Function to insert a node at the beginning of the Doubly Linked List */
+void push(BigInt** head, BigInt** prev, int new_digit) {
+    BigInt * newBigInt = newInt(new_digit);
+
+    newBigInt->next = (*head);
+    newBigInt->prev = (*prev);
+
+    (*head) = newBigInt;
+}
+
+/* Adds contents of two linked lists and return the head node of resultant list */
+BigInt* addTwoLists (BigInt* first, BigInt* second) {
+    BigInt* res = NULL; // res is head node of the resultant list
+    BigInt *temp, *prev = NULL;
+    int carry = 0, sum;
+
+    while (first != NULL || second != NULL) //while both lists exist
+    {
+        // Calculate value of next digit in resultant list.
+        // The next digit is sum of following things
+        // (i)  Carry
+        // (ii) Next digit of first list (if there is a next digit)
+        // (ii) Next digit of second list (if there is a next digit)
+        sum = carry + (first? first->digit: 0) + (second? second->digit: 0);
+
+        // update carry for next calulation
+        carry = (sum >= 10)? 1 : 0;
+
+        // update sum if it is greater than 10
+        sum = sum % 10;
+
+        // Create a new node with sum as digit
+        temp = newInt(sum);
+
+        // if this is the first node then set it as head of the resultant list
+        if(res == NULL)
+            res = temp;
+        else // If this is not the first node then connect it to the rest.
+            prev->next = temp;
+
+        // Set prev for next insertion
+        prev  = temp;
+
+        // Move first and second pointers to next nodes
+        if (first) first = first->next;
+        if (second) second = second->next;
+    }
+
+    if (carry > 0)
+        temp->next = newInt(carry);
+
+    // return head of the resultant list
+    return res;
+}
+
+BigInt * getDigit(BigInt * head, int index) {
+    int i = 0;
+    BigInt * ret = head;
+    while (i != index) {
+        ret = ret->next;
+        i++;
+    }
+    return ret;
+}
+
+// A utility function to print a linked list
+void printList(BigInt *number) {
+    printf("%d   ", getDigit(number, 0)->digit);
+    while(number != NULL) {
+        printf("%d ", number->digit);
+        number = number->next;
+    }
+    printf("\n");
+}
+
+int main(void) {
+    BigInt* res = NULL;
+    BigInt* first = NULL;
+    BigInt* second = NULL;
+
+    printf("Give me a number to add to the total: ");
+    int c = getchar();
+    while ('\n' != c) {
+        if (!isspace(c)) {
+            push(&first, &first, c - '0');
+        }
+        c = getchar();
+    }
+
+    // create first list 7->5->9->4->6
+    printf("First List is ");
+    printList(first);
+
+    // create second list 8->4
+    push(&second, &second, 4);
+    push(&second, &second,  8);
+    printf("Second List is ");
+    printList(second);
+
+    // Add the two lists and see result
+    res = addTwoLists(first, second);
+    printf("Total: ");
+    printList(res);
+
+    return EXIT_SUCCESS;
+}

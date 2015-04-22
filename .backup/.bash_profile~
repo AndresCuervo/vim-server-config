@@ -1,0 +1,11 @@
+# This allows the system's manager to update and improve your login
+# sequence without having to edit everyone's file.  If you delete it,
+# you won't benefit from those changes.
+
+source .bashrc
+
+PS1="< \u@\h >"
+
+# ---------- Aliases --------------
+alias ls="ls -a --color"
+alias cl="clear && ls"

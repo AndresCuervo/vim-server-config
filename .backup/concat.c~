@@ -1,0 +1,11 @@
+#include "stdio.h"
+int main(void)
+{
+    int a, b;
+    printf("Please input an integer value: ");
+    scanf("%x", &a);
+    printf("You entered: %d\n", a);
+    scanf("%d", &b);
+    printf("You entered: %d\n", b);
+    return 0;
+}

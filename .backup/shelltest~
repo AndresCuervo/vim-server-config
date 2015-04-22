@@ -1,0 +1,7 @@
+#/bin/bash
+
+SOURCE_FILES=`ls *.c`
+echo ("------- With No Quotes Below -----------")
+echo ${SOURCE_FILES}
+echo ("------- With Double Quotes Below -------")
+echo "${SOURCE_FILES}"

@@ -1,0 +1,33 @@
+#!/bin/sh
+echo "====================="
+# set -x
+
+FTYPE=""
+DIRECTORY=""
+
+if echo "${1}" | grep -q "*."; then
+    FTYPE="-name '${1}'"
+    shift
+    echo "DETECTED: ${FTYPE}"
+fi
+
+
+while [ $# -gt 0 ]; do
+    if [ ! -e ${1}  ]; then
+        echo "This isn't a directory, whoops: ${1}"
+        shift
+    else
+        DIRECTORY="${DIRECTORY} ${1}"
+        shift
+    fi
+done
+
+THIS_COUNT=`find ${DIRECTORY} ${FTYPE} -type f | while read FILENAME; do
+cat "${FILENAME}"
+done | wc -l`
+
+echo $THIS_COUNT
+
+# COMMAND=`find $DIRECTORY $FTYPE | xargs wc -l`
+#
+# echo "$COMMAND"

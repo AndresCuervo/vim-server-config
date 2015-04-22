@@ -1,0 +1,44 @@
+#include "bits.h"
+
+void decode_bits(int ch) {
+    static int output = 0;
+    static int position = CHAR_BIT;
+
+    // If the char passed in is a space ...
+    if (!isspace(ch)) {
+        switch (ch) {
+            // ... and it's 0 ...
+            case '0' :
+                // decriment position and break.
+                position--;
+                break;
+            case '1' :
+                // decriment position and add it to the output number.
+                position--;
+                output+= (int) pow(2, position);
+                break;
+            default :
+                exit(1);
+        }
+
+        // If we've exhausted the number, reset everything to do it all
+        // over again! Yayyyy
+        if (position == 0) {
+        printf("%c", output);
+            position = CHAR_BIT;
+            output = 0;
+        }
+    }
+}
+
+void print_bits(int ch) {
+    // Incrementing until reaching the CHAR_BIT value ...
+    for (int i = 0; i < CHAR_BIT; i++) {
+        /* ... print the character i bits to the left, anding it with 128
+         * as a character mask. Take its negative to determine whether
+         * or not it's equal to 0, then take the negative of that to flip
+         * the bits to their correct value. */
+        printf("%d", !!((ch << i & 0x80)));
+    }
+    printf(" ");
+}

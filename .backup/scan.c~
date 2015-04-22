@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
+// Flags
+int r = 0;
+int j = 0;
+int s = 0;
+
+int line_width = 72;
+
+int main(int argc, char *argv[]) {
+
+    for (int i = 1; i < argc; ++i) {
+        if (strcmp("-w", argv[i]) == 0 && i <= (argc - 1)) {
+            if (isdigit(*argv[i + 1]) && i != (argc - 1)) {
+                line_width = atoi(argv[i + 1]);
+            } else {
+                printf("%s","you goofed");
+            }
+        }
+    }
+
+    char word[100];
+    char c = 0;
+
+    int line_l = 0;
+    int word_l = 0;
+
+    c = fscanf(stdin, "%s" , word);
+    while (c != EOF) {
+        word_l = strlen(word);
+
+        if ((line_l + word_l) <= line_width) {
+            printf("%s ", word);
+            line_l += word_l + 1;
+        } else {
+            line_l = word_l;
+            printf("\n%s ", word);
+        }
+
+        int ch = getchar();
+        int nextch = 0;
+
+        while(ch == '\n') {
+            if ((nextch= getchar()) == '\n') {
+                printf("\n\n");
+                ch = getchar();
+                while(ch == '\n') {
+                    if (s == 0) {
+                        printf("%c", ch);
+                    }
+                    ch = getchar();
+                }
+                line_l= 0;
+            }
+            ch = getchar();
+        }
+        ungetc(ch, stdin);
+
+        c = fscanf(stdin, "%s" , word);
+    }
+}

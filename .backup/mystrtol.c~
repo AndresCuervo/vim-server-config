@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+int mystrtol(char * start, char ** rest){
+    *rest  = start;//keep track of the beginning
+    int numb = 0;// have we found a number 0 for no 1 for yes
+    for(;isspace(*start);start++);//skips white space
+    int sign = (*start == '-') ? -1 : 1;//checks to see if there was a - and makes sign according
+    if(sign == -1){//grap next character if we have a sign
+        start++;
+        //printf("I made it");
+    }
+    int n;
+    for(n = 0; isdigit(*start);){
+        n = 10*n +( *start++ - '0');//
+        numb = 1;
+    }
+
+    if(numb == 0){
+        n = 0;
+        return n;
+    }else{
+        strcpy(*rest,start);
+        return sign*n;
+    }
+}
+
+int main(){
+    char line[] = " -56 Cards in a negative deck";
+    long value;
+    char *rest;
+    value = mystrtol(line, &rest);
+    printf("%ld\n", value);
+    printf("%s\n",rest);
+}

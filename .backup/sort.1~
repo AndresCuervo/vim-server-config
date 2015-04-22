@@ -1,0 +1,45 @@
+.\" Man page for our implementatin of the UNIX sort program
+.\" Cuervo & Oge - Spring 2015
+
+.TH sort 1 "04 April 2015" "CSCI 241" "Oberlin College"
+
+.SH NAME
+.B sort
+\- a program to sort lines of text!
+
+.SH SYNOPSIS
+.B ./sort
+[ optional sorting flags ]
+
+.SH DESCRIPTION
+This program reads lines from standard input and sorts them, by default alphabetically.
+
+.SH OPTIONS
+.IP "-f"
+This flag
+.B f
+olds lowercase letters into uppercase ones (i.e., case insensitive comparisons).
+sort lines based on a leading number
+
+.IP "-n"
+Sorts lines based on the leading
+.B n
+umber.
+.IP
+.I Note:
+The flag ignores leading whitespace.
+
+.IP "-r"
+.B R
+everses the order of the sort.
+
+.IP "-h or -?"
+Brings up the
+.B h
+elp note and returns with a non-zero exit value.
+
+.SH AUTHORS
+Andres Cuervo and Alexandre Oge (Spring 2015)
+
+.SH BUGS
+    None!

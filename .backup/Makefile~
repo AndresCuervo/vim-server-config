@@ -1,0 +1,9 @@
+all: sort
+
+sort: sort.c
+	gccx sort.c -o sort
+
+clean:
+	rm -f sort
+
+.PHONIES: all sort

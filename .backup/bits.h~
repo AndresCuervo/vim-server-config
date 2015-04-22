@@ -1,0 +1,13 @@
+#ifndef BITS_H
+#define BITS_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <math.h>
+#include <limits.h>
+
+void decode_bits(int);
+void print_bits(int);
+
+#endif

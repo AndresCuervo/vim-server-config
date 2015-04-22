@@ -1,0 +1,36 @@
+#!/bin/sh
+
+THELINES=5
+TARGET=""
+
+# If the first argument is **not** the -n flag, make it the target directory
+# and shift it out of the list.
+while [ ! ${1} = "-n" ]; do
+    TARGET=${1}
+    shift
+done
+
+FOUND="notfound"
+
+# For each argument ...
+for arg in "${@}"; do
+    # Check if that argument is the -n flag
+    if [ ${arg} = "-n"  ]; then
+        # If it is, set the found variable to the truth condition and
+        # shift the argument out of the list
+        FOUND="found"
+        shift
+    fi
+    # If the variable's been found ...
+    if [ "${FOUND}" = "found" ]; then
+        # Take the argument after -n (which is now arg because of the shift)
+        # and make it the THELINES variable
+        THELINES=${arg}
+    fi
+done
+
+# Run the disk utility program with human readable sorting, truncating to
+# either the default (5) or the amount specified in the flag
+OUTPUT=`du $TARGET -ha | sort -h | tail -$THELINES`
+
+echo "$OUTPUT"

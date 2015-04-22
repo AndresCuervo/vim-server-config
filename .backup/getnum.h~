@@ -1,0 +1,17 @@
+#ifndef GETNUM_H
+#define GETNUM_H
+
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <limits.h>
+
+void getdec(int);
+void getoct(int);
+int hexdigit(int);
+void getHex(char);
+void getbin(char);
+long getnum(void);
+
+#endif

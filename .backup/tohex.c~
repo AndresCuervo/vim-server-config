@@ -1,0 +1,24 @@
+#include "getnum.h"
+
+int main(){
+    int ch = ' ';
+    int number;
+    while(ch != EOF){
+        // Put the character back on the read stack to be read later.
+        ungetc(ch, stdin);
+        // Get the number we're working with and ...
+        number = getnum();
+        // ... if it's a positive number ...
+        if ((number - number) == 0){
+            // ... print it with 0x.
+            printf("%s%X ", "0x", number);
+        } else {
+            //... if it's negative ...
+            number = abs(number);
+            // ... print it with -0x.
+            printf("%s%X", "-0x", number);
+        }
+        printf("\n");
+        ch = getchar();
+    }
+}

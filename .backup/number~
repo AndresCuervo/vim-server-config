@@ -1,0 +1,17 @@
+123456dsafsa789dsaf0 // embeded in a word 10 digit
+
+11111111111 // 11 digit number!
+
+1234567890 // 10 digit number
+
+ 1234567890 // 10 digit number with a leading space
+
+11111 22222 // 2 five digit numbers
+
+$9,234,567,890 // 10 digit number with commas + leading dollar sign
+
+11345.56..7890 // 10 digit number dot separated
+
+-1334567890 // negative 10 digit number
+
+15345678901234567890 // twenty digit number

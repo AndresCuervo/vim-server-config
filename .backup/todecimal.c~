@@ -1,0 +1,16 @@
+#include "getnum.h"
+
+int main(){
+    int ch = ' ';
+    int number;
+    // While not EOF ...
+    while(ch != EOF){
+        // ... put it back on the read stack ...
+        ungetc(ch, stdin);
+        // ... simply get the number and print it.
+        number = getnum();
+        printf("%d \n", number);
+        // Get the next one!
+        ch = getchar();
+    }
+}

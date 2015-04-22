@@ -1,0 +1,39 @@
+#!/bin/sh
+
+FTYPE=""
+DIR=""
+
+# If the first argument isn't a directory ...
+if [ ! -d ${1} ]; then
+    # make it the filetype argument.
+    FTYPE="-name ${1}"
+    shift
+fi
+
+# If the arg list is still greater than 0 ...
+while [ $# -gt 0 ]; do
+    # and the argument isn't a directory, echo that as an warning, also shift it
+    # out of the list
+    if [ ! -d ${1}  ]; then
+        echo "This isn't a directory, whoops: ${1}"
+        shift
+    else
+        # and it is a directory that exists then add it to the
+        # directory look list and shift
+        DIR="${DIR} ${1}"
+        shift
+    fi
+done
+
+set -v
+set -x
+# Make a variable count for the results of the penultimate operation ...
+SUM=0
+for FILE in `find ${DIR} ${FTYPE} -type f`;do
+    echo "I found: ${FILE}"
+    COUNT=`wc -l ${FILE} | cut -d" " -f 1`
+    SUM=`expr ${SUM} + ${COUNT}`
+done
+
+# and print it!
+echo $SUM

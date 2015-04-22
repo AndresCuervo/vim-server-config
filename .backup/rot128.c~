@@ -1,0 +1,12 @@
+#include <stdio.h>
+// Below defines UCHAR_MAX, found at: http://www.cplusplus.com/reference/climits/
+#include <limits.h>
+
+int main() {
+    int c;
+    // While not the end of file or error
+    while (EOF != (c = getchar())) {
+        // rotate the character
+        putchar(c + ((UCHAR_MAX + 1) / 2));
+    }
+}

@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <math.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+long getnum(void) {
+    int ch, nextch;
+
+    ch = getchar();
+    nextch = getchar();
+
+    while (isspace(ch)) {
+        if (!isspace(nextch)) {
+            ungetc(nextch, stdin);
+        } else {
+            ch = nextch;
+            nextch = getchar();
+        }
+    }
+}
+
+int main () {
+    getnum();
+    /* while (1==1) { */
+    /* } */
+}

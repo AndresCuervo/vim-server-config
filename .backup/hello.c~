@@ -1,0 +1,13 @@
+/* Andres Cuervo
+ * This is a simple introductory C program! */
+
+#include <stdio.h>
+
+int main() {
+    printf("The New Chapel Aquariam opened in %d.\n", 1955);
+    printf("There were only %1d dolphins when the place opened.\n", 7);
+    printf("Then the population suddenly exploded by %f percent!\n", 68.7923);
+    printf("The staff marine biologist we're %1.2f percent sure it was a biological anomoly.\n", 36.27);
+    printf("There are now %.3f dolphins in the New Chapel Aquarium!!!\n", 987.005);
+    printf("Note: We say %.3f because we're not sure where Oswald the dolphin is, poor kid\n", 987.005);
+}
