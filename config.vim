@@ -172,3 +172,7 @@ set mouse=a    " Mouse in all modes
 
 " Better complete options to speed it up
 set complete=.,w,b,u,U
+
+" save and restore folds when a file is closed and re-opened
+autocmd BufWinLeave ?* mkview
+autocmd BufWinEnter ?* loadview
